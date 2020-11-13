@@ -21,18 +21,14 @@ The Support group can be reached out to at [Jarvis Support](https://t.me/JarvisS
 
 
 # How to setup
-<details>
-  <summary>Click to expand!! </summary>
   
- 
- 
- Note: This instruction set is just a copy paste from Marie, note that [Jarvis Support](https://t.me/JarvisSupportOT) aims to handle support for @Jarvisbot and now how to setup your own fork, if you find this bit confusing/tough to understand then we recommend you ask a dev, kindly avoid asking how to setup the bot instance in the support chat, it aims to help our own instance of the bot. 
+ **Note: This instruction set is just a copy paste from Marie, note that [Jarvis Support](https://t.me/JarvisSupportOT) aims to handle support for [This Bot](https://t.me/jarvisofficialsecuritybot) and now how to setup your own fork, if you find this bit confusing/tough to understand then we recommend you ask a dev, kindly avoid asking how to setup the bot instance in the support chat, it aims to help our own instance of the bot.**
   
-  ## Setting up the bot (Read this before trying to use!):
+## Setting up the bot (Read this before trying to use!):
 Please make sure to use python3.6, as I cannot guarantee everything will work as expected on older python versions!
 This is because markdown parsing is done by iterating through a dict, which are ordered by default in 3.6.
 
-  ### Configuration
+### Configuration
 
 There are two possible ways of configuring your bot: a config.py file, or ENV variables.
 
@@ -100,7 +96,7 @@ Install the necessary python dependencies by moving to the project directory and
 
 This will install all necessary python packages.
 
-  ### Database
+### Database
 
 If you wish to use a database-dependent module (eg: locks, notes, userinfo, users, filters, welcomes),
 you'll need to have a database installed on your system. I use postgres, so I recommend using it for optimal compatibility.
@@ -141,8 +137,8 @@ You should now be able to build your database URI. This will be:
 Replace sqldbtype with whichever db youre using (eg postgres, mysql, sqllite, etc)
 repeat for your username, password, hostname (localhost?), port (5432?), and db name.
 
-  ## Modules
-   ### Setting load order.
+## Modules
+### Setting load order.
 
 The module load order can be changed via the `LOAD` and `NO_LOAD` configuration settings.
 These should both represent lists.
@@ -153,7 +149,7 @@ If `NO_LOAD` is not present, or is an empty list, all modules selected for loadi
 
 If a module is in both `LOAD` and `NO_LOAD`, the module will not be loaded - `NO_LOAD` takes priority.
 
-   ### Creating your own modules.
+### Creating your own modules.
 
 Creating a module has been simplified as much as possible - but do not hesitate to suggest further simplification.
 
