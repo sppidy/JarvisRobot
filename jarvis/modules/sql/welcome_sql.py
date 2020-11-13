@@ -11,7 +11,7 @@ DEFAULT_GOODBYE = "Nice knowing Ya!"
 
 DEFAULT_WELCOME_MESSAGES = [
     "Hey {first}, How are You ?",
-    "Hi {fist}, How are You ?"
+    "Hi {first}, How are You ?"
 ]
 DEFAULT_GOODBYE_MESSAGES = [
     "Nice Knowing Ya"
