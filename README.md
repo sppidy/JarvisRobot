@@ -13,7 +13,9 @@ Can be found on telegram as [Jarvis](https://t.me/jarvisofficialsecuritybot).
 
 The Support group can be reached out to at [Jarvis Support](https://t.me/JarvisSupportOT), where you can ask for help setting up your bot, discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
- 
+**Note** :- This Code Should Not Be Private According to License If U Want To Make Your Own Bot Fork and Create a File With Name Of config.py Further Instructions Are Given Below 
+
+## This Repo Should Not Be Cloned or Be Private
 
 ## Setting up the bot (Read this before trying to use!):
 
