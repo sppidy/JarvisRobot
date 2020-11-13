@@ -1,5 +1,5 @@
 ![Jarvis](https://telegra.ph/file/62202bce1ce295b6f13bc.png)
-# Jarvis bot
+# Jarvis Security bot
 
 
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green) [![Join Support!](https://img.shields.io/badge/Support%20Chat-JarvisSupport-green)](https://t.me/JarvisSupportOT)
