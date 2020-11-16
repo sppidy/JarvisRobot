@@ -156,30 +156,30 @@ def new_member(bot: Bot, update: Update, job_queue: JobQueue):
             # Welcome Sudos
             elif new_mem.id in SUDO_USERS:
                 update.effective_message.reply_text(
-                    "Huh! A Royal Nation just joined! Stay Alert!"
+                    "Huh! A Friendly User just joined! Stay Alert!"
                 )
 
             # Welcome Support
             elif new_mem.id in SUPPORT_USERS:
                 update.effective_message.reply_text(
-                    "Huh! Someone with a Sakura Nation level just joined!"
+                    "Huh! Someone with a Support User has just joined!"
                 )
 
             # Welcome Whitelisted
             elif new_mem.id in TECHY_USERS:
                 update.effective_message.reply_text(
-                    "Oof! A Sardegna Nation just joined!"
+                    "Oof! A Techy User just joined!"
                 )
 
             # Welcome Sardegnas
             elif new_mem.id in WHITELIST_USERS:
                 update.effective_message.reply_text(
-                    "Oof! A Neptunia Nation just joined!"
+                    "Oof! A Speacial Member just joined!"
                 )
 
             # Welcome yourself
             elif new_mem.id == bot.id:
-                update.effective_message.reply_text("Thanks for adding me! Join our support chat @YorkTownEagleUnion for support.. <3")
+                update.effective_message.reply_text("Thanks for adding me! Join our support chat @JarvisSupportOt for support.. <3")
 
             else:
                 # If welcome message is media, send with appropriate function
