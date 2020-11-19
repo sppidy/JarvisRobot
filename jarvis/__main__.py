@@ -160,6 +160,62 @@ def error_callback(bot, update, error):
         print(error)
         # handle all other telegram related errors
 
+@run_async
+def start(bot: Bot, update: Update, args: List[str]):
+    if update.effective_chat.type == "private":
+        if len(args) >= 1:
+            if args[0].lower() == "help":
+                send_help(update.effective_chat.id, HELP_STRINGS)
+            elif args[0].lower() == "nations":
+                IMPORTED["nations"].send_nations(update)
+            elif args[0].lower().startswith("stngs_"):
+                match = re.match("stngs_(.*)", args[0].lower())
+                chat = dispatcher.bot.getChat(match.group(1))
+
+                if is_user_admin(chat, update.effective_user.id):
+                    send_settings(match.group(1), update.effective_user.id, False)
+                else:
+                    send_settings(match.group(1), update.effective_user.id, True)
+
+            elif args[0][1:].isdigit() and "rules" in IMPORTED:
+                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
+
+        else:
+            first_name = update.effective_user.first_name
+            update.effective_message.reply_photo(
+                START_IMG,
+                PM_START_TEXT.format(
+                    escape_markdown(first_name),
+                    escape_markdown(bot.first_name),
+                    OWNER_ID,
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    [[
+                        InlineKeyboardButton(
+                            text="Add Jarvis to your group",
+                            url="t.me/{}?startgroup=true".format(bot.username))
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Support Chat",
+                            url=f"https://t.me/JarvisSupportOT"),
+                        InlineKeyboardButton(
+                            text="Updates Channel",
+                            url="https://t.me/JarvisOT")
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Source Code",
+                            url="https://github.com/sppidy/JarvisRobot/"),
+                        InlineKeyboardButton(
+                            text="Help", 
+                            url="t.me/{}?start=help".format(bot.username))
+                    ]]))
+    else:
+        update.effective_message.reply_text("Hi, I'm Jarvis.")
+        
+
 
 @run_async
 def help_button(bot: Bot, update: Update):
@@ -216,60 +272,6 @@ def help_button(bot: Bot, update: Update):
 
     except BadRequest:
         pass
-
-@run_async
-def start(bot: Bot, update: Update, args: List[str]):
-    if update.effective_chat.type == "private":
-        if len(args) >= 1:
-            if args[0].lower() == "help":
-                send_help(update.effective_chat.id, HELP_STRINGS)
-            elif args[0].lower() == "nations":
-                IMPORTED["nations"].send_nations(update)
-            elif args[0].lower().startswith("stngs_"):
-                match = re.match("stngs_(.*)", args[0].lower())
-                chat = dispatcher.bot.getChat(match.group(1))
-
-                if is_user_admin(chat, update.effective_user.id):
-                    send_settings(match.group(1), update.effective_user.id, False)
-                else:
-                    send_settings(match.group(1), update.effective_user.id, True)
-
-            elif args[0][1:].isdigit() and "rules" in IMPORTED:
-                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
-
-        else:
-            first_name = update.effective_user.first_name
-            update.effective_message.reply_photo(
-                START_IMG,
-                PM_START_TEXT.format(
-                    escape_markdown(first_name),
-                    escape_markdown(bot.first_name),
-                    OWNER_ID,
-                ),
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(
-                    [[
-                        InlineKeyboardButton(
-                            text="Add Jarvis to your group",
-                            url="t.me/{}?startgroup=true".format(bot.username))
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text="Support Chat",
-                            url=f"https://t.me/JarvisSupportOT"),
-                        InlineKeyboardButton(
-                            text="Updates Channel",
-                            url="https://t.me/JarvisOT")
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text="Source Code",
-                            url="https://github.com/sppidy/JarvisRobot/"),
-                        InlineKeyboardButton(text="Help", callback_data="send_help")
-                    ]]))
-    else:
-        update.effective_message.reply_text("Hi, I'm Jarvis.")
-
     
 @run_async
 def get_help(bot: Bot, update: Update):
