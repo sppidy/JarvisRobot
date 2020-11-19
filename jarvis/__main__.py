@@ -265,7 +265,7 @@ def start(bot: Bot, update: Update, args: List[str]):
                         InlineKeyboardButton(
                             text="Source Code",
                             url="https://github.com/sppidy/JarvisRobot/"),
-                        InlineKeyboardButton(text="Help", callback_data="help")
+                        InlineKeyboardButton(text="Help", callback_data="send_help")
                     ]]))
     else:
         update.effective_message.reply_text("Hi, I'm Jarvis.")
