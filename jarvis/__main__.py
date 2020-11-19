@@ -3,7 +3,6 @@ import importlib
 import re
 from typing import Optional, List
 from sys import argv
-from telethon import Button, custom, events
 from pyrogram import idle, Client
 from telegram import Bot, Update, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import (
@@ -133,61 +132,6 @@ def test(bot: Bot, update: Update):
     update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
 
-
-@run_async
-def start(bot: Bot, update: Update, args: List[str]):
-    if update.effective_chat.type == "private":
-        if len(args) >= 1:
-            if args[0].lower() == "help":
-                send_help(update.effective_chat.id, HELP_STRINGS)
-            elif args[0].lower() == "nations":
-                IMPORTED["nations"].send_nations(update)
-            elif args[0].lower().startswith("stngs_"):
-                match = re.match("stngs_(.*)", args[0].lower())
-                chat = dispatcher.bot.getChat(match.group(1))
-
-                if is_user_admin(chat, update.effective_user.id):
-                    send_settings(match.group(1), update.effective_user.id, False)
-                else:
-                    send_settings(match.group(1), update.effective_user.id, True)
-
-            elif args[0][1:].isdigit() and "rules" in IMPORTED:
-                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
-
-        else:
-            first_name = update.effective_user.first_name
-            update.effective_message.reply_photo(
-                START_IMG,
-                PM_START_TEXT.format(
-                    escape_markdown(first_name),
-                    escape_markdown(bot.first_name),
-                    OWNER_ID,
-                ),
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(
-                    [[
-                        InlineKeyboardButton(
-                            text="Add Jarvis to your group",
-                            url="t.me/{}?startgroup=true".format(bot.username))
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text="Support Chat",
-                            url=f"https://t.me/JarvisSupportOT"),
-                        InlineKeyboardButton(
-                            text="Updates Channel",
-                            url="https://t.me/JarvisOT")
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text="Source Code",
-                            url="https://github.com/sppidy/JarvisRobot/"),
-                        custom.Button.inline("Help", data="help_back")
-                    ]]))
-    else:
-        update.effective_message.reply_text("Hi, I'm Jarvis.")
-
-
 # for test purposes
 def error_callback(bot, update, error):
     try:
@@ -273,7 +217,60 @@ def help_button(bot: Bot, update: Update):
     except BadRequest:
         pass
 
+@run_async
+def start(bot: Bot, update: Update, args: List[str]):
+    if update.effective_chat.type == "private":
+        if len(args) >= 1:
+            if args[0].lower() == "help":
+                send_help(update.effective_chat.id, HELP_STRINGS)
+            elif args[0].lower() == "nations":
+                IMPORTED["nations"].send_nations(update)
+            elif args[0].lower().startswith("stngs_"):
+                match = re.match("stngs_(.*)", args[0].lower())
+                chat = dispatcher.bot.getChat(match.group(1))
 
+                if is_user_admin(chat, update.effective_user.id):
+                    send_settings(match.group(1), update.effective_user.id, False)
+                else:
+                    send_settings(match.group(1), update.effective_user.id, True)
+
+            elif args[0][1:].isdigit() and "rules" in IMPORTED:
+                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
+
+        else:
+            first_name = update.effective_user.first_name
+            update.effective_message.reply_photo(
+                START_IMG,
+                PM_START_TEXT.format(
+                    escape_markdown(first_name),
+                    escape_markdown(bot.first_name),
+                    OWNER_ID,
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    [[
+                        InlineKeyboardButton(
+                            text="Add Jarvis to your group",
+                            url="t.me/{}?startgroup=true".format(bot.username))
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Support Chat",
+                            url=f"https://t.me/JarvisSupportOT"),
+                        InlineKeyboardButton(
+                            text="Updates Channel",
+                            url="https://t.me/JarvisOT")
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Source Code",
+                            url="https://github.com/sppidy/JarvisRobot/"),
+                        InlineKeyboardButton(text="Help", callback_data="help_back")
+                    ]]))
+    else:
+        update.effective_message.reply_text("Hi, I'm Jarvis.")
+
+    
 @run_async
 def get_help(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
@@ -496,11 +493,11 @@ def migrate_chats(bot: Bot, update: Update):
 
 def main():
     test_handler = CommandHandler("test", test)
-    start_handler = CommandHandler("start", start, pass_args=True)
+
 
     help_handler = CommandHandler("help", get_help)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_")
-
+    start_handler = CommandHandler("start", start, pass_args=True)
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
 
