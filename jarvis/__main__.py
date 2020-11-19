@@ -181,7 +181,8 @@ def start(bot: Bot, update: Update, args: List[str]):
                     [
                         InlineKeyboardButton(
                             text="Source Code",
-                            url="https://github.com/sppidy/JarvisRobot/")
+                            url="https://github.com/sppidy/JarvisRobot/"),
+                        custom.Button.inline("Help", data="help_back")
                     ]]))
     else:
         update.effective_message.reply_text("Hi, I'm Jarvis.")
