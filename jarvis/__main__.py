@@ -3,6 +3,7 @@ import importlib
 import re
 from typing import Optional, List
 from sys import argv
+
 from pyrogram import idle, Client
 from telegram import Bot, Update, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import (
@@ -43,7 +44,6 @@ from jarvis.modules.helper_funcs.misc import paginate_modules
 PM_START_TEXT = """
 Hi {}, my name is {}! 
 I am a Tech themed group management bot with some fun extras 
-
 You can find the list of available commands with /help.
 """
 
@@ -132,33 +132,6 @@ def test(bot: Bot, update: Update):
     update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
 
-# for test purposes
-def error_callback(bot, update, error):
-    try:
-        raise error
-    except Unauthorized:
-        print("no nono1")
-        print(error)
-        # remove update.message.chat_id from conversation list
-    except BadRequest:
-        print("no nono2")
-        print("BadRequest caught")
-        print(error)
-
-        # handle malformed requests - read more below!
-    except TimedOut:
-        print("no nono3")
-        # handle slow connection problems
-    except NetworkError:
-        print("no nono4")
-        # handle other connection problems
-    except ChatMigrated as err:
-        print("no nono5")
-        print(err)
-        # the chat_id of a group has changed, use e.new_chat_id instead
-    except TelegramError:
-        print(error)
-        # handle all other telegram related errors
 
 @run_async
 def start(bot: Bot, update: Update, args: List[str]):
@@ -207,14 +180,39 @@ def start(bot: Bot, update: Update, args: List[str]):
                     [
                         InlineKeyboardButton(
                             text="Source Code",
-                            url="https://github.com/sppidy/JarvisRobot/"),
-                        InlineKeyboardButton(
-                            text="Help", 
-                            url="t.me/{}?start=help".format(bot.username))
+                            url="https://github.com/sppidy/JarvisRobot/")
                     ]]))
     else:
         update.effective_message.reply_text("Hi, I'm Jarvis.")
-        
+
+
+# for test purposes
+def error_callback(bot, update, error):
+    try:
+        raise error
+    except Unauthorized:
+        print("no nono1")
+        print(error)
+        # remove update.message.chat_id from conversation list
+    except BadRequest:
+        print("no nono2")
+        print("BadRequest caught")
+        print(error)
+
+        # handle malformed requests - read more below!
+    except TimedOut:
+        print("no nono3")
+        # handle slow connection problems
+    except NetworkError:
+        print("no nono4")
+        # handle other connection problems
+    except ChatMigrated as err:
+        print("no nono5")
+        print(err)
+        # the chat_id of a group has changed, use e.new_chat_id instead
+    except TelegramError:
+        print(error)
+        # handle all other telegram related errors
 
 
 @run_async
@@ -272,7 +270,8 @@ def help_button(bot: Bot, update: Update):
 
     except BadRequest:
         pass
-    
+
+
 @run_async
 def get_help(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
