@@ -28,7 +28,6 @@ from jarvis import (
     TECHY_USERS,
     WHITELIST_USERS,
     LOGGER,
-    sw,
 )
 from jarvis.modules.helper_funcs.chat_status import user_admin, is_user_ban_protected
 from jarvis.modules.helper_funcs.misc import build_keyboard, revert_buttons
@@ -130,11 +129,6 @@ def new_member(bot: Bot, update: Update, job_queue: JobQueue):
         sent = None
         should_mute = True
         welcome_bool = True
-
-        if sw != None:
-            sw_ban = sw.get_ban(new_mem.id)
-            if sw_ban:
-                return
 
         if should_welc:
 
@@ -367,11 +361,6 @@ def left_member(bot: Bot, update: Update):
     if should_goodbye:
         left_mem = update.effective_message.left_chat_member
         if left_mem:
-
-            if sw != None:
-                sw_ban = sw.get_ban(left_mem.id)
-                if sw_ban:
-                    return
 
             # Ignore bot being kicked
             if left_mem.id == bot.id:
