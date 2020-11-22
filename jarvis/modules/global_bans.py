@@ -20,7 +20,6 @@ from jarvis import (
     WHITELIST_USERS,
     STRICT_GBAN,
     GBAN_LOGS,
-    sw,
 )
 from jarvis.modules.helper_funcs.chat_status import (
     user_admin,
