@@ -18,8 +18,7 @@ from jarvis import (
     DEV_USERS,
     TECHY_USERS,
     WHITELIST_USERS,
-    INFOPIC,
-    sw
+    INFOPIC
 )
 from jarvis.__main__ import STATS, USER_INFO, TOKEN
 from jarvis.modules.disable import DisableAbleCommandHandler
@@ -147,17 +146,6 @@ def info(bot: Bot, update: Update, args: List[str]):
         text += f"\nUsername: @{html.escape(user.username)}"
 
     text += f"\nPermanent user link: {mention_html(user.id, 'link')}"
-    
-    try:
-        spamwtc = sw.get_ban(int(user.id))
-        if spamwtc:
-            text += "\n\n<b>This person is banned in Spamwatch!</b>"
-            text += f"\nReason: <pre>{spamwtc.reason}</pre>"
-            text += "\nAppeal at @SpamWatchSupport"
-        else:
-            pass
-    except:
-        pass # don't crash if api is down somehow...
     
     Nation_level_present = False
 
