@@ -507,11 +507,6 @@ Gbans, also known as global bans, are used by the bot owners to ban spammers acr
 you and your groups by removing spam flooders as quickly as possible. They can be disabled for you group by calling \
 /gbanstat
 Note: You can appeal gbans or ask gbans at @JarvisSupportOT
-
-Jarvis also integrates @Spamwatch API into gbans to remove Spammers as much as possible from your chatroom!
-*What is SpamWatch?*
-SpamWatch maintains a large constantly updated ban-list of spambots, trolls, bitcoin spammers and unsavoury characters[.](https://telegra.ph/file/ac12a2c6b831dd005015b.jpg)
-Jarvis will constantly help banning spammers off from your group automatically So, you don't have to worry about spammers storming your group.
 """
 
 GBAN_HANDLER = CommandHandler("gban", gban, pass_args=True)
