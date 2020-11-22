@@ -1,8 +1,7 @@
 import logging
 import os
 import sys
-import time
-import spamwatch
+import timeR
 import telegram.ext as tg
 from telethon import TelegramClient
 from pyrogram import Client, errors
@@ -86,7 +85,6 @@ if ENV:
     TIME_API_KEY = os.environ.get("TIME_API_KEY", None)
     WALL_API = os.environ.get("WALL_API", None)
     LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY", None)
-    spamwatch_api = os.environ.get("sw_api", None)
     INFOPIC = bool(os.environ.get('INFOPIC', False))
     START_IMG = os.environ.get("START_IMG", None)
 
@@ -149,19 +147,10 @@ else:
     TIME_API_KEY = Config.TIME_API_KEY
     WALL_API = Config.WALL_API
     LASTFM_API_KEY = Config.LASTFM_API_KEY
-    spamwatch_api = Config.spamwatch_api
     INFOPIC = Config.INFOPIC
     START_IMG = Config.START_IMG
 SUDO_USERS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-
-# SpamWatch
-if spamwatch_api == "None":
-    sw = None
-    LOGGER.warning("SpamWatch API key is missing! Check your config.env.")
-else:
-    sw = spamwatch.Client(spamwatch_api)
-
 
 updater = tg.Updater(TOKEN, workers=WORKERS)
 telethn = TelegramClient("Jarvis", API_ID, API_HASH)
