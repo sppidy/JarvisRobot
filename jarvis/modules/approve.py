@@ -10,7 +10,7 @@ from typing import Optional, List
 
 
 @user_admin
-@promote_permission
+@can_promote
 @run_async
 def approve(bot: Bot, update: Update, args: List[str]) -> str:
 	 message = update.effective_message
