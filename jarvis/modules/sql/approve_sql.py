@@ -1,86 +1,70 @@
 import threading
 
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import UnicodeText
+from sqlalchemy import Column, String, Boolean, UnicodeText, Integer, func, distinct
 
-from jarvis.modules.sql import BASE
-from jarvis.modules.sql import SESSION
+from jarvis.modules.sql import BASE, SESSION
 
 
-class APPROVE(BASE):
-    __tablename__ = "approved_users"
-
+class Approvals(BASE):
+    __tablename__ = "approves"
+    chat_id = Column(String(14), primary_key=True)
     user_id = Column(Integer, primary_key=True)
-    chat_id = Column(Integer, primary_key=True)
 
-    def __init__(self, user_id, chat_id):
+
+    def __init__(self, chat_id, user_id):
+        self.chat_id = str(chat_id)  # ensure string
         self.user_id = user_id
-        self.chat_id = chat_id
+        
 
     def __repr__(self):
-        return "approved_status for {} in {}".format(self.user_id,
-                                                     self.chat_id)
+        return "<Approve %s>" % self.user_id
 
 
-APPROVE.__table__.create(checkfirst=True)
-INSERTION_LOCK = threading.RLock()
+Approvals.__table__.create(checkfirst=True)
 
-APPROVED_USERS = []
-
-
-def is_approved(user_id, chat_id):
-    return user_id and chat_id in APPROVED_USERS
+APPROVE_INSERTION_LOCK = threading.RLock()
 
 
-def set_APPROVE(user_id, chat_id):
-    with INSERTION_LOCK:
-        curr = SESSION.query(APPROVE).get(user_id, chat_id)
-        if not curr:
-            curr = APPROVE(user_id, chat_id)
-        else:
-            curr.is_approved = True
-        SESSION.add(curr)
+def approve(chat_id, user_id):
+    with APPROVE_INSERTION_LOCK:
+        note = Approvals(str(chat_id), user_id)
+        SESSION.add(note)
         SESSION.commit()
 
 
-def rm_APPROVE(user_id, chat_id):
-    with INSERTION_LOCK:
-        curr = SESSION.query(APPROVE).get(user_id, chat_id)
-        if curr:
-            if user_id and chat_id in APPROVED_USERS:
-                del APPROVED_USERS[user_id, chat_id]
-            SESSION.delete(curr)
-            SESSION.commit()
-            return True
-        SESSION.close()
-        return False
-
-
-def toggle_APPROVE(user_id, chat_id):
-    with INSERTION_LOCK:
-        curr = SESSION.query(APPROVE).get(user_id, chat_id)
-        if not curr:
-            curr = APPROVE(user_id, chat_id)
-        elif curr.is_approved:
-            curr.is_approved = False
-        elif not curr.is_approved:
-            curr.is_approved = True
-        SESSION.add(curr)
-        SESSION.commit()
-
-
-def __load_APPROVE_users():
-    global APPROVED_USERS
+def is_approved(chat_id, user_id):
     try:
-        all_APPROVE = SESSION.query(APPROVE).all()
-        APPROVED_USERS = {
-            user.user_id + " " + user.chat_id
-            for user in all_APPROVE if user.is_approved
-        }
+        return SESSION.query(Approvals).get((str(chat_id), user_id))
     finally:
         SESSION.close()
 
 
-__load_APPROVE_users()
+def disapprove(chat_id, user_id):
+    with APPROVE_INSERTION_LOCK:
+        note = SESSION.query(Approvals).get((str(chat_id), user_id))
+        if note:
+            SESSION.delete(note)
+            SESSION.commit()
+            return True
+        else:
+            SESSION.close()
+            return False
+
+
+def list_approved(chat_id):
+    try:
+        return SESSION.query(Approvals).filter(Approvals.chat_id == str(chat_id)).order_by(Approvals.user_id.asc()).all()
+    finally:
+        SESSION.close()
+        
+def num_approved():
+    try:
+        return SESSION.query(Approvals).count()
+    finally:
+        SESSION.close()
+
+def num_approved_chats():
+    try:
+        return SESSION.query(func.count(distinct(Approvals.chat_id))).scalar()
+    finally:
+        SESSION.close()
