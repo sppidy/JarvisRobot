@@ -355,6 +355,26 @@ def user_can_change(func):
 
     return user_can_changee
 
+def can_promote(func):
+    @wraps(func)
+    def promote_rights(bot: Bot, update: Update, *args, **kwargs):
+
+        chat = update.effective_chat
+        update_chat_title = chat.title
+        message_chat_title = update.effective_message.chat.title
+
+        if update_chat_title == message_chat_title:
+            cant_promote = f"I can't promote/demote people here!\nMake sure I'm admin and can appoint new admins."
+        else:
+            cant_promote = f"I can't promote/demote people in <b>{update_chat_title}</b>!\nMake sure I'm admin there and can appoint new admins."
+        
+        if chat.get_member(bot.id).can_promote_members:
+            return func(bot, update, *args, **kwargs)
+        else:
+            update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
+
+    return promote_rights
+
 # Workaround for circular import with connection.py
 from jarvis.modules import connection
 
