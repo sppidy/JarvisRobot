@@ -355,6 +355,24 @@ def user_can_change(func):
 
     return user_can_changee
 
+def promote_permission(func):  
+
+    @wraps(func)  
+    def permoter(bot: Bot, update: Update, *args, **kwargs):    
+        user = update.effective_user.id  
+        member = update.effective_chat.get_member(user)  
+        query = update.callback_query
+
+        if not (member.can_promote_members or member.status == "creator") and not user in DEV_USERS:
+            if query:
+                query.answer("You are missing the following rights to use this command: CanPromoteUsers")
+            else:
+                update.effective_message.reply_text("You are missing the following rights to use this command:CanPromoteUsers.")  
+            return ""  
+
+        return func(bot, update, *args, **kwargs)  
+
+    return permoter
 
 # Workaround for circular import with connection.py
 from jarvis.modules import connection
