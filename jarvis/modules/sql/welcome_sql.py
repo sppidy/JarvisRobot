@@ -16,6 +16,7 @@ DEFAULT_WELCOME_MESSAGES = [
 DEFAULT_GOODBYE_MESSAGES = [
     "Nice Knowing Ya"
     "You Will Comeback Soon.. Anyway Bye!!!"
+    "See you later, Alligator!"
 ]
 
 
